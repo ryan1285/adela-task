@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Workspace – Marketing Adela</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2326478C'/%3E%3Ccircle cx='22' cy='10' r='3' fill='%23C9A227'/%3E%3C/svg%3E">
+<script>window.TM_CONFIG = { API_URL: 'https://script.google.com/macros/s/AKfycbxNQYpn8UCv2s8zvrPDLwQ7KU1wFHBYruLE0Eoa3SIfoYIEBTUXLXK3Cgg0zwPTXUpO/exec' };</script>
+<style>
+:root{
+  --lapis:#26478C; --lapis-deep:#1A3166; --lapis-wash:#E8EDF7;
+  --gold:#C9A227; --gold-wash:#F7F0D9;
+  --paper:#F4F5F9; --card:#FFFFFF; --ink:#1B2236; --muted:#5F6780; --line:#DCE0EA;
+  --danger:#B8402C; --danger-wash:#FBE9E5; --ok:#2E7A57; --ok-wash:#E3F2EA; --warn:#A86B12; --warn-wash:#FBF0DC;
+  --r-sm:6px; --r-md:10px;
+  --sel:#B4536B; --bd:#B7791F;
+}
+/* Màu nhận diện thương hiệu – đổi mã màu ở đây */
+[data-b]{--b:#5F6780;--b-soft:#EEF0F5;--b-ink:#fff}
+[data-b="Lapis"]{--b:#26478C;--b-soft:#E3EAF7}
+[data-b="Sélia"]{--b:#6D1120;--b-soft:#FFE6DC}
+[data-b="1000Birthdays"]{--b:#E0761B;--b-soft:#FDEAD6}
+.btag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 9px 2px 7px;background:var(--b-soft);color:var(--b);font-size:12px;font-weight:600;white-space:nowrap}
+.btag i{width:8px;height:8px;border-radius:50%;background:var(--b);flex:none}
+.legend{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;font-size:12px;color:var(--muted)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Be Vietnam Pro",system-ui,sans-serif;font-size:14px;line-height:1.5;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+a{color:var(--lapis)}
+.hidden{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+.mob-dow{display:none}
+
+/* ---------- Login ---------- */
+#login{min-height:100%;display:grid;place-items:center;padding:24px;background:
+  radial-gradient(circle at 78% 18%, rgba(201,162,39,.18) 0 2px, transparent 3px) 0 0/46px 46px,
+  var(--lapis-deep)}
+.login-box{width:100%;max-width:360px;background:var(--card);border-radius:14px;padding:32px 28px 28px}
+.login-box h1{font-size:22px;line-height:1.25;margin:0 0 4px;font-weight:700}
+.login-box p{margin:0 0 22px;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:var(--muted)}
+.input,select.input,textarea.input{width:100%;border:1px solid var(--line);background:#fff;border-radius:var(--r-sm);padding:9px 11px;outline:none}
+.input:focus{border-color:var(--lapis);box-shadow:0 0 0 3px var(--lapis-wash)}
+textarea.input{resize:vertical;min-height:80px}
+.input[readonly],.input:disabled{background:var(--paper);color:var(--muted)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:var(--r-sm);padding:8px 14px;font-weight:600;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--lapis);border-color:var(--lapis);color:#fff}
+.btn.primary:hover{background:var(--lapis-deep)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1B2236}
+.btn.danger{color:var(--danger);border-color:#E6B9AF}
+.btn.block{width:100%;padding:11px}
+.btn[disabled]{opacity:.55;cursor:default}
+.err{color:var(--danger);font-size:13px;min-height:20px;margin-top:6px}
+
+/* ---------- Shell ---------- */
+#app{display:grid;grid-template-rows:auto auto 1fr;grid-template-columns:minmax(0,1fr);height:100%}
+#app>*{min-width:0}
+.topbar{display:flex;align-items:center;gap:18px;padding:12px 20px;background:var(--lapis-deep);color:#fff}
+.mark{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.mark i{width:22px;height:22px;border-radius:6px;background:var(--lapis);position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.mark i::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--gold);right:4px;top:4px}
+.views{display:flex;gap:4px;margin-left:8px}
+.views button{white-space:nowrap;flex:none;background:transparent;border:0;color:rgba(255,255,255,.72);padding:6px 12px;border-radius:999px;font-weight:600}
+.views button[aria-pressed=true]{background:rgba(255,255,255,.14);color:#fff}
+.me{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:13px}
+.me button{background:transparent;border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:var(--r-sm);padding:5px 10px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);background:#fff}
+.filters .input{width:auto;padding:7px 10px}
+.filters .search{flex:1;min-width:160px;max-width:300px}
+.filters .spacer{flex:1}
+.main{overflow:auto;padding:18px 20px 40px}
+.sync{font-size:12px;color:var(--muted)}
+
+/* ---------- Board ---------- */
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(262px,1fr);gap:14px;align-items:start;min-height:100%}
+.col{background:#E9ECF3;border-radius:var(--r-md);padding:10px;min-height:120px}
+.col.drop{background:var(--lapis-wash);box-shadow:inset 0 0 0 2px var(--lapis)}
+.col-h{display:flex;align-items:baseline;gap:8px;padding:2px 4px 10px}
+.col-h b{font-size:14px}
+.col-h span{margin-left:auto;font-size:22px;font-weight:700;color:var(--muted);line-height:1}
+.col[data-s="Cần sửa"] .col-h b{color:var(--danger)}
+.col[data-s="Chờ duyệt"] .col-h b{color:var(--warn)}
+.col[data-s="Đã đăng"] .col-h b{color:var(--ok)}
+.cards{display:flex;flex-direction:column;gap:8px}
+.card{display:grid;grid-template-columns:48px 1fr;background:var(--card);border-radius:8px;border:1px solid var(--line);text-align:left;padding:0;width:100%;overflow:hidden}
+.card:hover{border-color:#B9C2D6}
+.card[draggable=true]{cursor:grab}
+.stub{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--b);padding:8px 0;color:var(--b-ink)}
+.stub b{font-size:20px;line-height:1;font-weight:700}
+.stub small{font-size:11px;opacity:.82}
+.card{border-left:0}
+.card-b{background:linear-gradient(90deg,var(--b-soft),#fff 46px)}
+.card-b{padding:9px 11px 10px;min-width:0}
+.card-t{font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card-m{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;font-size:12px;color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:1px 8px;background:var(--paper);font-size:12px;font-weight:500;color:var(--muted)}
+.tag.late{background:var(--danger-wash);color:var(--danger)}
+.tag.soon{background:var(--warn-wash);color:var(--warn)}
+.tag.note{background:var(--gold-wash);color:#6E4A0C}
+.empty{color:var(--muted);font-size:13px;padding:10px 6px}
+
+/* ---------- Calendar ---------- */
+.cal-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.cal-h h2{font-size:20px;margin:0;font-weight:700}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;background:var(--line);gap:1px}
+.cal .dow{background:#fff;padding:8px;font-size:12px;font-weight:600;color:var(--muted)}
+.day{background:#fff;min-height:116px;padding:6px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.day.out{background:#F8F9FB}
+.day.out .dn{color:#B3B9C9}
+.day.today .dn{background:var(--gold);color:var(--ink);border-radius:999px;padding:0 7px}
+.dn{font-size:12px;font-weight:700;align-self:flex-start}
+.chip{display:block;width:100%;text-align:left;border:0;border-left:4px solid var(--b);background:var(--b-soft);color:var(--ink);font-weight:500;border-radius:4px;padding:3px 6px;font-size:12px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip[data-s="Đã đăng"]{opacity:.55;text-decoration:line-through}
+
+/* ---------- List & report ---------- */
+.tbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+.tbl th,.tbl td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tbl th{font-size:12px;font-weight:600;color:var(--muted);background:#F8F9FB}
+.tbl tr.clickable{cursor:pointer}
+.tbl tr.clickable:hover td{background:#F8F9FB}
+.tbl td.r,.tbl th.r{text-align:right}
+.report{display:grid;gap:22px;max-width:1080px}
+.report h2{font-size:17px;margin:0 0 10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px}
+.kpi b{display:block;font-size:28px;line-height:1.1}
+.kpi span{color:var(--muted);font-size:13px}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--gold)}
+
+/* ---------- Drawer ---------- */
+.scrim{position:fixed;inset:0;background:rgba(17,24,45,.42);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(640px,100%);background:#fff;z-index:21;display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(17,24,45,.18);transform:translateX(0);transition:transform .22s ease}
+.drawer.closed{transform:translateX(100%)}
+.d-h{padding:18px 22px 14px;border-bottom:1px solid var(--line);border-top:6px solid var(--b,var(--lapis))}
+.d-h .row{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.d-h h2{font-size:19px;line-height:1.3;margin:0;font-weight:700}
+.d-h textarea.input{font-size:18px;font-weight:700;min-height:56px}
+.d-body{flex:1;overflow:auto;padding:6px 22px 24px}
+.d-sec{padding:16px 0;border-bottom:1px solid var(--line)}
+.d-sec:last-child{border-bottom:0}
+.d-sec h3{font-size:14px;margin:0 0 12px;color:var(--lapis-deep)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 14px}
+.ro{white-space:pre-wrap;padding:2px 0 4px}
+.ro.mut{color:var(--muted)}
+.d-f{display:flex;gap:10px;align-items:center;padding:14px 22px;border-top:1px solid var(--line);background:#fff;flex-wrap:wrap}
+.d-f .spacer{flex:1}
+.close{border:0;background:transparent;font-size:22px;line-height:1;padding:4px 8px;margin-left:auto;color:var(--muted)}
+.feedback{background:var(--gold-wash);border-radius:var(--r-sm);padding:10px 12px;white-space:pre-wrap}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;z-index:40;font-size:13px}
+.toast.bad{background:var(--danger)}
+.loading{display:grid;place-items:center;height:60vh;color:var(--muted)}
+
+/* ---------- Plan ---------- */
+.plan{display:grid;gap:18px;max-width:1180px}
+.plan>*,.plan-top>*{min-width:0}
+.qa .input{min-width:110px}
+.plan-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.plan-h h2{font-size:20px;margin:0;font-weight:700}
+.plan-h .acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--paper);color:var(--muted);border:1px solid var(--line)}
+.pill[data-s="Chờ duyệt"]{background:var(--warn-wash);color:var(--warn);border-color:transparent}
+.pill[data-s="Cần sửa"]{background:var(--danger-wash);color:var(--danger);border-color:transparent}
+.pill[data-s="Đã duyệt"]{background:var(--ok-wash);color:var(--ok);border-color:transparent}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px}
+.panel h3{font-size:14px;margin:0 0 12px;color:var(--lapis-deep)}
+.plan-top{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px;align-items:start}
+.goals{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.goal{border:1px solid var(--line);border-top:4px solid var(--b);border-radius:8px;padding:10px 12px}
+.goal b{font-size:13px}
+.goal .num{font-size:22px;font-weight:700;display:block;line-height:1.2;margin-top:2px}
+.goal small{color:var(--muted);font-size:12px;display:block}
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-md)}
+.tbl tr[data-b] td:first-child{box-shadow:inset 4px 0 0 var(--b)}
+.tbl tr.prop td{background:#FFFCF2}
+.tag.prop{background:var(--gold-wash);color:#6E4A0C}
+.qa td{background:#FBFCFE}
+.qa .input{padding:6px 8px;font-size:13px}
+.tbl tfoot td{border-bottom:0}
+.hint{color:var(--muted);font-size:13px}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(900px,calc(100% - 24px));max-height:90vh;background:#fff;border-radius:12px;z-index:31;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(17,24,45,.3)}
+.modal-scrim{position:fixed;inset:0;background:rgba(17,24,45,.42);z-index:30}
+.m-h{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.m-h h2{font-size:17px;margin:0}
+.m-b{padding:16px 20px;overflow:auto;display:grid;gap:14px}
+.m-f{display:flex;gap:10px;align-items:center;padding:12px 20px;border-top:1px solid var(--line);flex-wrap:wrap}
+.m-f .spacer{flex:1}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px 12px}
+.map .field{margin:0}
+.drop-zone{border:1.5px dashed #B7C3DD;border-radius:10px;padding:18px;text-align:center;background:var(--lapis-wash)}
+.tbl.sm td,.tbl.sm th{padding:6px 8px;font-size:12px}
+.tbl tr.bad td{color:var(--muted);background:#FBF4F2}
+
+@media (max-width:760px){
+  .plan-top{grid-template-columns:1fr}
+  .plan-h .acts{margin-left:0;width:100%}
+  .plan-h h2{font-size:18px}
+  .topbar{flex-wrap:wrap;padding:10px 14px;gap:10px}
+  .views{order:3;width:100%;margin:0;overflow-x:auto}
+  .filters,.main{padding-left:14px;padding-right:14px}
+  .board{grid-auto-columns:84vw}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .cal{display:block;background:transparent;border:0}
+  .cal .dow,.day.out,.day.blank{display:none}
+  .day{min-height:0;border:1px solid var(--line);border-radius:8px;margin-bottom:6px}
+  .day.none{display:none}
+  .mob-dow{display:inline;color:var(--muted);font-weight:500}
+}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+</style>
+</head>
+<body>
+
+<section id="login" class="hidden" aria-label="Đăng nhập">
+  <form class="login-box" id="loginForm">
+    <h1>Workspace – Marketing Adela</h1>
+    <p>Lapis, Sélia, 1000Birthdays</p>
+    <div class="field"><label for="lgName">Tên của bạn</label><select id="lgName" class="input" required><option value="">Đang tải danh sách…</option></select></div>
+    <div class="field"><label for="lgPin">Mã đăng nhập</label><input id="lgPin" class="input" type="password" inputmode="numeric" autocomplete="current-password" required></div>
+    <button class="btn primary block" type="submit" id="lgBtn">Đăng nhập</button>
+    <div class="err" id="lgErr" role="alert"></div>
+  </form>
+</section>
+
+<div id="app" class="hidden">
+  <header class="topbar">
+    <div class="mark"><i aria-hidden="true"></i>Workspace – Marketing Adela</div>
+    <nav class="views" aria-label="Chế độ xem">
+      <button data-v="board" aria-pressed="true">Bảng</button>
+      <button data-v="plan" aria-pressed="false">Kế hoạch</button>
+      <button data-v="cal" aria-pressed="false">Lịch đăng</button>
+      <button data-v="list" aria-pressed="false">Danh sách</button>
+      <button data-v="report" aria-pressed="false" class="mgr">Báo cáo</button>
+    </nav>
+    <div class="me"><span id="meName"></span><button id="logout">Đăng xuất</button></div>
+  </header>
+  <div class="filters">
+    <input type="month" id="fMonth" class="input" aria-label="Tháng">
+    <select id="fBrand" class="input" aria-label="Thương hiệu"><option value="">Mọi thương hiệu</option></select>
+    <select id="fPerson" class="input mgr" aria-label="Người phụ trách"><option value="">Cả team</option></select>
+    <input id="fText" class="input search" type="search" placeholder="Tìm theo tiêu đề hoặc mã" aria-label="Tìm kiếm">
+    <span class="spacer"></span>
+    <span class="sync" id="sync"></span>
+    <button class="btn" id="reload">Tải lại</button>
+    <button class="btn primary mgr" id="newPost">Tạo bài mới</button>
+  </div>
+  <main class="main" id="main"><div class="loading">Đang tải dữ liệu…</div></main>
+</div>
+
+<div class="scrim hidden" id="scrim"></div>
+<aside class="drawer closed" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle"></aside>
+<div class="modal-scrim hidden" id="mScrim"></div>
+<div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle"></div>
+<div class="toast hidden" id="toast" role="status"></div>
+
+<script>
+const API = (window.TM_CONFIG && window.TM_CONFIG.API_URL) || '';
+const STATUSES = ['Ý tưởng','Đang làm','Chờ duyệt','Cần sửa','Đã duyệt','Đã đăng'];
+const STAFF_STATUSES = ['Ý tưởng','Đang làm','Chờ duyệt','Đã đăng'];
+const STAFF_FIELDS = ['Trạng thái','Giờ đăng','Link file ảnh / video','Caption','Link bài đăng','Reach','Lượt xem','Cảm xúc','Bình luận','Chia sẻ','Tin nhắn','Ghi chú của nhân sự'];
+const DOW = ['T2','T3','T4','T5','T6','T7','CN'];
+const PROP = 'Đề xuất';
+const PLAN_FIELDS = ['Ngày đăng','Giờ đăng','Thương hiệu','Định dạng','Giai đoạn','Chủ đề / tiêu đề','Nội dung triển khai','Brief ảnh / video','CTA','Lưu ý','Ghi chú của nhân sự','Link file ảnh / video'];
+const store = { get:k=>{try{return localStorage.getItem(k);}catch(e){return null;}}, set:(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}}, del:k=>{try{localStorage.removeItem(k);}catch(e){}} };
+const S = {token:store.get('tm_token')||'', me:null, posts:[], staff:[], lists:{}, plans:[], goals:[], view:'board', open:null, draft:{}};
+
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const todayISO = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const fmtD = iso => iso ? iso.slice(8,10)+'/'+iso.slice(5,7) : '';
+const isMgr = () => S.me && S.me.isManager;
+const bTag = b => b?`<span class="btag" data-b="${esc(b)}"><i></i>${esc(b)}</span>`:'';
+const legend = () => `<div class="legend">${(S.lists['Thương hiệu']||[]).map(bTag).join('')}</div>`;
+
+const GAS = window.google && google.script && google.script.run;
+async function call(action, data={}){
+  const body = JSON.stringify({action,token:S.token,...data});
+  let j;
+  if(GAS){
+    j = await new Promise((ok,no)=>google.script.run.withSuccessHandler(r=>ok(JSON.parse(r))).withFailureHandler(e=>no(new Error((e&&e.message)||'Mất kết nối. Thử lại.'))).api(body));
+  }else{
+    if(!API) throw new Error('Chưa cấu hình địa chỉ API.');
+    const res = await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});
+    j = await res.json();
+  }
+  if(!j.ok && j.error==='AUTH'){ logout(); throw new Error('Phiên đăng nhập đã hết hạn. Đăng nhập lại.'); }
+  if(!j.ok) throw new Error(j.error||'Có lỗi xảy ra.');
+  return j;
+}
+function toast(msg,bad){ const t=$('#toast'); t.textContent=msg; t.className='toast'+(bad?' bad':''); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.add('hidden'),3200); }
+
+/* ---------- Auth ---------- */
+async function showLogin(){
+  $('#app').classList.add('hidden'); $('#login').classList.remove('hidden');
+  try{ const j=await call('staffNames'); $('#lgName').innerHTML='<option value="">Chọn tên</option>'+j.names.map(n=>`<option>${esc(n)}</option>`).join(''); }
+  catch(e){ $('#lgName').innerHTML='<option value="">Không tải được danh sách</option>'; $('#lgErr').textContent=e.message; }
+}
+$('#loginForm').addEventListener('submit', async e=>{
+  e.preventDefault(); $('#lgErr').textContent=''; $('#lgBtn').disabled=true;
+  try{ const j=await call('login',{name:$('#lgName').value,pin:$('#lgPin').value}); S.token=j.token; store.set('tm_token',j.token); $('#lgPin').value=''; await boot(); }
+  catch(err){ $('#lgErr').textContent=err.message; }
+  finally{ $('#lgBtn').disabled=false; }
+});
+function logout(){ S.token=''; store.del('tm_token'); closeDrawer(); showLogin(); }
+$('#logout').onclick=logout;
+
+async function load(){
+  $('#sync').textContent='Đang đồng bộ…';
+  const j=await call('list');
+  S.me=j.me; S.posts=j.posts; S.staff=j.staff; S.lists=j.lists; S.plans=j.plans||[]; S.goals=j.goals||[];
+  $('#sync').textContent='Cập nhật lúc '+new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
+}
+async function boot(){
+  if(!S.token) return showLogin();
+  try{ await load(); }catch(e){ if(!S.token) return; $('#main').innerHTML=`<div class="loading">${esc(e.message)}</div>`; }
+  $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
+  $('#meName').textContent=S.me.name+(isMgr()?' (quản lý)':'');
+  document.querySelectorAll('.mgr').forEach(el=>el.classList.toggle('hidden',!isMgr()));
+  const brands=S.lists['Thương hiệu']||[];
+  $('#fBrand').innerHTML='<option value="">Mọi thương hiệu</option>'+brands.map(b=>`<option>${esc(b)}</option>`).join('');
+  $('#fPerson').innerHTML='<option value="">Cả team</option>'+S.staff.map(b=>`<option>${esc(b)}</option>`).join('');
+  if(!$('#fMonth').value) $('#fMonth').value=todayISO().slice(0,7);
+  render();
+}
+
+/* ---------- Helpers ---------- */
+function flags(p){
+  const t=todayISO(), st=p['Trạng thái'], out=[];
+  const open=['Ý tưởng','Đang làm','Cần sửa'].includes(st);
+  if(open && p['Hạn nộp duyệt'] && p['Hạn nộp duyệt']<t) out.push(['late','Trễ hạn nộp duyệt']);
+  else if(open && p['Hạn nộp duyệt']===t) out.push(['soon','Nộp duyệt hôm nay']);
+  if(!['Đã đăng','Hủy'].includes(st) && p['Ngày đăng'] && p['Ngày đăng']<t) out.push(['late','Trễ lịch đăng']);
+  return out;
+}
+function filtered(opts={}){
+  const m=$('#fMonth').value, b=$('#fBrand').value, pe=$('#fPerson').value, q=$('#fText').value.trim().toLowerCase();
+  return S.posts.filter(p=>{
+    if(!opts.withProposed && p['Trạng thái']===PROP) return false;
+    if(!opts.ignoreMonth && m && (p['Ngày đăng']||'').slice(0,7)!==m) return false;
+    if(b && p['Thương hiệu']!==b) return false;
+    if(pe && p['Người phụ trách']!==pe) return false;
+    if(q && !((p['Chủ đề / tiêu đề']||'').toLowerCase().includes(q) || (p['Mã']||'').toLowerCase().includes(q))) return false;
+    return true;
+  }).sort((a,c)=>(a['Ngày đăng']||'').localeCompare(c['Ngày đăng']||''));
+}
+function canMove(p,to){
+  if(isMgr()) return true;
+  if(!STAFF_STATUSES.includes(to)) return false;
+  if(to==='Đã đăng') return ['Đã duyệt','Đã đăng'].includes(p['Trạng thái']);
+  return !['Đã duyệt','Đã đăng'].includes(p['Trạng thái']);
+}
+
+/* ---------- Views ---------- */
+function render(){
+  document.querySelectorAll('.views button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===S.view));
+  ({board:renderBoard,plan:renderPlan,cal:renderCal,list:renderList,report:renderReport})[S.view]();
+}
+function cardHTML(p){
+  const d=p['Ngày đăng']||'';
+  const f=flags(p).map(([c,t])=>`<span class="tag ${c}">${t}</span>`).join('');
+  const fb=p['Nhận xét của quản lý']&&['Cần sửa','Chờ duyệt','Ý tưởng','Đang làm'].includes(p['Trạng thái'])?'<span class="tag note">Có góp ý</span>':'';
+  return `<button class="card" data-id="${esc(p['Mã'])}" data-b="${esc(p['Thương hiệu'])}" draggable="true">
+    <span class="stub"><b class="num">${d?d.slice(8,10):'–'}</b><small>${d?'Th'+(+d.slice(5,7)):''}</small></span>
+    <span class="card-b"><span class="card-t">${esc(p['Chủ đề / tiêu đề'])}</span>
+    <span class="card-m">${bTag(p['Thương hiệu'])}<span>${esc(p['Mã'])}</span><span>${esc(p['Định dạng'])}</span>${isMgr()?`<span>${esc(p['Người phụ trách'])}</span>`:''}</span>
+    ${f||fb?`<span class="card-m">${f}${fb}</span>`:''}</span></button>`;
+}
+function renderBoard(){
+  const ps=filtered().filter(p=>p['Trạng thái']!=='Hủy');
+  $('#main').innerHTML=legend()+`<div class="board">${STATUSES.map(s=>{
+    const list=ps.filter(p=>(p['Trạng thái']||'Ý tưởng')===s);
+    return `<section class="col" data-s="${s}" aria-label="${s}"><div class="col-h"><b>${s}</b><span class="num">${list.length}</span></div>
+      <div class="cards">${list.map(cardHTML).join('')||'<div class="empty">Chưa có bài.</div>'}</div></section>`;}).join('')}</div>`;
+  bindCards();
+  document.querySelectorAll('.col').forEach(col=>{
+    col.addEventListener('dragover',e=>{e.preventDefault();col.classList.add('drop');});
+    col.addEventListener('dragleave',()=>col.classList.remove('drop'));
+    col.addEventListener('drop',e=>{e.preventDefault();col.classList.remove('drop');const id=e.dataTransfer.getData('text/plain');moveTo(id,col.dataset.s);});
+  });
+}
+function bindCards(){
+  document.querySelectorAll('[data-id]').forEach(el=>{
+    el.addEventListener('click',()=>openDrawer(el.dataset.id));
+    el.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',el.dataset.id));
+  });
+}
+async function moveTo(id,to){
+  const p=S.posts.find(x=>x['Mã']===id); if(!p||p['Trạng thái']===to) return;
+  if(!canMove(p,to)) return toast(to==='Đã đăng'?'Bài cần được duyệt trước khi đăng.':'Chỉ quản lý mới chuyển bài sang "'+to+'".',true);
+  const prev=p['Trạng thái']; p['Trạng thái']=to; render();
+  try{ const j=await call('update',{id,fields:{'Trạng thái':to}}); Object.assign(p,j.post); toast(id+' chuyển sang '+to); }
+  catch(e){ p['Trạng thái']=prev; render(); toast(e.message,true); }
+}
+
+function renderCal(){
+  const m=$('#fMonth').value||todayISO().slice(0,7);
+  const [y,mo]=m.split('-').map(Number);
+  const first=new Date(y,mo-1,1), days=new Date(y,mo,0).getDate();
+  const lead=(first.getDay()+6)%7, t=todayISO();
+  const ps=filtered().filter(p=>p['Trạng thái']!=='Hủy');
+  let cells=DOW.map(d=>`<div class="dow">${d}</div>`).join('');
+  for(let i=0;i<lead;i++) cells+='<div class="day out blank"></div>';
+  for(let d=1;d<=days;d++){
+    const iso=m+'-'+String(d).padStart(2,'0');
+    const list=ps.filter(p=>p['Ngày đăng']===iso);
+    const wd=DOW[(lead+d-1)%7];
+    cells+=`<div class="day ${iso===t?'today':''} ${list.length?'':'none'}"><span class="dn">${d}<span class="mob-dow"> ${wd}</span></span>${list.map(p=>`<button class="chip" data-id="${esc(p['Mã'])}" data-b="${esc(p['Thương hiệu'])}" data-s="${esc(p['Trạng thái'])}" title="${esc(p['Chủ đề / tiêu đề'])}">${esc(p['Chủ đề / tiêu đề'])}</button>`).join('')}</div>`;
+  }
+  $('#main').innerHTML=`<div class="cal-h"><button class="btn" id="pm" aria-label="Tháng trước">‹</button><h2>Tháng ${mo}/${y}</h2><button class="btn" id="nm" aria-label="Tháng sau">›</button><span style="flex:1"></span>${legend().replace('margin-bottom:12px','')}</div><div class="cal">${cells}</div>`;
+  const shift=k=>{const d=new Date(y,mo-1+k,1);$('#fMonth').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');render();};
+  $('#pm').onclick=()=>shift(-1); $('#nm').onclick=()=>shift(1);
+  bindCards();
+}
+
+function renderList(){
+  const ps=filtered();
+  $('#main').innerHTML=ps.length?`<table class="tbl"><thead><tr><th>Mã</th><th>Ngày đăng</th><th>Chủ đề</th><th>Thương hiệu</th><th>Định dạng</th>${isMgr()?'<th>Người làm</th>':''}<th>Trạng thái</th><th>Hạn nộp duyệt</th></tr></thead><tbody>${
+    ps.map(p=>`<tr class="clickable" data-id="${esc(p['Mã'])}" data-b="${esc(p['Thương hiệu'])}"><td>${esc(p['Mã'])}</td><td class="num">${fmtD(p['Ngày đăng'])}</td><td>${esc(p['Chủ đề / tiêu đề'])} ${flags(p).map(([c,t])=>`<span class="tag ${c}">${t}</span>`).join(' ')}</td><td>${bTag(p['Thương hiệu'])}</td><td>${esc(p['Định dạng'])}</td>${isMgr()?`<td>${esc(p['Người phụ trách'])}</td>`:''}<td>${esc(p['Trạng thái'])}</td><td class="num">${fmtD(p['Hạn nộp duyệt'])}</td></tr>`).join('')
+  }</tbody></table>`:'<div class="empty">Không có bài nào khớp bộ lọc. Đổi tháng hoặc bỏ bớt bộ lọc.</div>';
+  document.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>openDrawer(tr.dataset.id));
+}
+
+function renderReport(){
+  const ps=filtered().filter(p=>p['Trạng thái']!=='Hủy');
+  const n=v=>Number(v)||0, t=todayISO();
+  const posted=ps.filter(p=>p['Trạng thái']==='Đã đăng');
+  const sum=(arr,f)=>arr.reduce((a,p)=>a+n(p[f]),0);
+  const inter=arr=>sum(arr,'Cảm xúc')+sum(arr,'Bình luận')+sum(arr,'Chia sẻ');
+  const late=ps.filter(p=>p['Ngày đăng']&&p['Ngày đăng']<t&&p['Trạng thái']!=='Đã đăng').length;
+  const pct=ps.length?Math.round(posted.length/ps.length*100):0;
+  const brands=(S.lists['Thương hiệu']||[]);
+  const nf=x=>x.toLocaleString('vi-VN');
+  const rowB=b=>{const a=ps.filter(p=>p['Thương hiệu']===b),d=a.filter(p=>p['Trạng thái']==='Đã đăng');return `<tr><td>${bTag(b)}</td><td class="r num">${a.length}</td><td class="r num">${d.length}</td><td class="r num">${a.filter(p=>p['Trạng thái']==='Chờ duyệt').length}</td><td class="r num">${a.filter(p=>p['Ngày đăng']&&p['Ngày đăng']<t&&p['Trạng thái']!=='Đã đăng').length}</td><td class="r num">${nf(sum(d,'Reach'))}</td><td class="r num">${nf(inter(d))}</td><td class="r num">${nf(sum(d,'Tin nhắn'))}</td></tr>`;};
+  const rowP=s=>{const a=ps.filter(p=>p['Người phụ trách']===s);const sc=a.map(p=>n(p['Điểm (1-5)'])).filter(Boolean);const lateSub=a.filter(p=>['Ý tưởng','Đang làm','Cần sửa'].includes(p['Trạng thái'])&&p['Hạn nộp duyệt']&&p['Hạn nộp duyệt']<t).length;
+    return `<tr><td>${esc(s)}</td><td class="r num">${a.length}</td><td class="r num">${a.filter(p=>['Ý tưởng','Đang làm'].includes(p['Trạng thái'])).length}</td><td class="r num">${a.filter(p=>p['Trạng thái']==='Chờ duyệt').length}</td><td class="r num">${a.filter(p=>p['Trạng thái']==='Cần sửa').length}</td><td class="r num">${a.filter(p=>p['Trạng thái']==='Đã đăng').length}</td><td class="r num">${lateSub}</td><td class="r num">${sc.length?(sc.reduce((x,y)=>x+y,0)/sc.length).toFixed(1):'–'}</td></tr>`;};
+  $('#main').innerHTML=`<div class="report">
+    <div class="kpis">
+      <div class="kpi"><b class="num">${posted.length}/${ps.length}</b><span>Bài đã đăng trong tháng</span><div class="bar"><i style="width:${pct}%"></i></div></div>
+      <div class="kpi"><b class="num">${ps.filter(p=>p['Trạng thái']==='Chờ duyệt').length}</b><span>Bài đang chờ anh duyệt</span></div>
+      <div class="kpi"><b class="num" style="color:${late?'var(--danger)':'inherit'}">${late}</b><span>Bài trễ lịch đăng</span></div>
+      <div class="kpi"><b class="num">${nf(sum(posted,'Reach'))}</b><span>Reach các bài đã đăng</span></div>
+    </div>
+    <div><h2>Theo thương hiệu</h2><table class="tbl"><thead><tr><th>Thương hiệu</th><th class="r">Bài trong lịch</th><th class="r">Đã đăng</th><th class="r">Chờ duyệt</th><th class="r">Trễ lịch</th><th class="r">Reach</th><th class="r">Tương tác</th><th class="r">Tin nhắn</th></tr></thead><tbody>${brands.map(rowB).join('')}</tbody></table></div>
+    <div><h2>Theo nhân sự</h2><table class="tbl"><thead><tr><th>Nhân sự</th><th class="r">Tổng bài</th><th class="r">Ý tưởng / đang làm</th><th class="r">Chờ duyệt</th><th class="r">Cần sửa</th><th class="r">Đã đăng</th><th class="r">Trễ hạn nộp duyệt</th><th class="r">Điểm TB</th></tr></thead><tbody>${S.staff.map(rowP).join('')}</tbody></table></div>
+  </div>`;
+}
+
+/* ---------- Drawer ---------- */
+function planLockedFor(p){ return planOf(p['Người phụ trách'], (p['Ngày đăng']||'').slice(0,7))['Trạng thái']==='Chờ duyệt'; }
+function propEditable(){ return S.open && !isMgr() && S.open['Trạng thái']===PROP && !planLockedFor(S.open); }
+function editable(f){ if(!S.open) return false; if(isMgr()) return true;
+  if(S.open['Trạng thái']===PROP) return propEditable() && PLAN_FIELDS.includes(f); if(f==='Trạng thái') return true; return STAFF_FIELDS.includes(f) && !['Đã duyệt','Đã đăng'].includes(S.open['Trạng thái']) || ['Link bài đăng','Reach','Lượt xem','Cảm xúc','Bình luận','Chia sẻ','Tin nhắn'].includes(f); }
+function val(f){ return f in S.draft ? S.draft[f] : (S.open[f] ?? ''); }
+function linkify(v){ return esc(v).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>'); }
+function fld(f,label,type='text',opts){
+  label=label||f; const id='f_'+f.replace(/\W/g,'_'); const v=val(f);
+  if(!editable(f)){
+    const shown = type==='date'?fmtD(v)+(v?'/'+v.slice(0,4):''):v;
+    return `<div class="field"><label>${esc(label)}</label><div class="ro ${shown?'':'mut'}">${shown?linkify(shown):'Chưa có'}</div></div>`;
+  }
+  let input;
+  if(type==='textarea') input=`<textarea id="${id}" class="input" data-f="${esc(f)}" rows="${opts||4}">${esc(v)}</textarea>`;
+  else if(type==='select') input=`<select id="${id}" class="input" data-f="${esc(f)}">${['',...opts].map(o=>`<option ${o===v?'selected':''} value="${esc(o)}">${esc(o||'Chọn')}</option>`).join('')}</select>`;
+  else input=`<input id="${id}" class="input ${type==='number'?'num':''}" type="${type}" data-f="${esc(f)}" value="${esc(v)}" ${type==='number'?'min="0"':''}>`;
+  return `<div class="field"><label for="${id}">${esc(label)}</label>${input}</div>`;
+}
+function openDrawer(id, isNew){
+  const found=S.posts.find(p=>p['Mã']===id);
+  if(!isNew && !found) return;
+  S.open=isNew?{'Mã':'','Trạng thái':'Ý tưởng','Thương hiệu':$('#fBrand').value||'Lapis'}:{...found}; S.draft={}; S.isNew=!!isNew;
+  drawDrawer();
+  $('#scrim').classList.remove('hidden'); requestAnimationFrame(()=>$('#drawer').classList.remove('closed'));
+  setTimeout(()=>{const f=$('#drawer').querySelector('textarea,input,select,button');f&&f.focus();},230);
+}
+function drawDrawer(){
+  const p=S.open, L=S.lists, mgr=isMgr();
+  const prop=p['Trạng thái']===PROP;
+  const stOpts=mgr?[...(prop?[PROP]:[]),...STATUSES,'Hủy']:STATUSES.filter(s=>s===p['Trạng thái']||canMove(p,s));
+  const titleEd=mgr||propEditable();
+  const fb=p['Nhận xét của quản lý'];
+  $('#drawer').innerHTML=`
+  <div class="d-h" data-b="${esc(val('Thương hiệu'))}">
+    <div class="row"><span class="tag">${S.isNew?'Bài mới':esc(p['Mã'])}</span><span id="dBrand">${bTag(val('Thương hiệu'))}</span>${flags(p).map(([c,t])=>`<span class="tag ${c}">${t}</span>`).join('')}<button class="close" id="dClose" aria-label="Đóng">×</button></div>
+    ${prop?`<div class="feedback" style="margin-bottom:10px">Bài đề xuất trong kế hoạch tháng. Bài vào bảng việc sau khi quản lý duyệt kế hoạch.${!mgr&&!propEditable()?' Kế hoạch đang chờ duyệt nên tạm khoá sửa.':''}</div>`:''}
+    ${titleEd?`<label class="hidden" for="f_title">Chủ đề</label><textarea id="f_title" class="input" data-f="Chủ đề / tiêu đề" rows="2" placeholder="Chủ đề / tiêu đề bài">${esc(val('Chủ đề / tiêu đề'))}</textarea>`:`<h2 id="dTitle">${esc(p['Chủ đề / tiêu đề'])}</h2>`}
+    ${titleEd?'<span id="dTitle" class="hidden">Chi tiết bài</span>':''}
+  </div>
+  <div class="d-body">
+    ${fb&&!mgr?`<div class="d-sec"><h3>Góp ý của quản lý</h3><div class="feedback">${linkify(fb)}</div></div>`:''}
+    <div class="d-sec"><h3>Kế hoạch</h3>
+      <div class="grid3">${fld('Trạng thái','Trạng thái','select',stOpts)}${fld('Ngày đăng','Ngày đăng','date')}${fld('Giờ đăng','Giờ đăng','time')}</div>
+      <div class="grid3">${fld('Thương hiệu','Thương hiệu','select',L['Thương hiệu']||[])}${fld('Định dạng','Định dạng','select',L['Định dạng']||[])}${fld('Giai đoạn','Giai đoạn','select',L['Giai đoạn']||[])}</div>
+      <div class="grid2">${fld('Người phụ trách','Người phụ trách','select',S.staff)}${fld('Hạn nộp duyệt','Hạn nộp duyệt','date')}</div>
+      ${fld('Nội dung triển khai','Nội dung triển khai','textarea',4)}
+      ${fld('Brief ảnh / video','Brief ảnh / video','textarea',3)}
+      ${fld('CTA','CTA','textarea',2)}
+      ${fld('Lưu ý','Lưu ý','textarea',2)}
+    </div>
+    <div class="d-sec"><h3>Sản phẩm</h3>
+      ${fld('Link file ảnh / video','Link file ảnh / video (Drive)','url')}
+      ${fld('Caption','Caption','textarea',8)}
+      ${fld('Ghi chú của nhân sự','Ghi chú của người làm','textarea',2)}
+    </div>
+    ${mgr?`<div class="d-sec"><h3>Duyệt bài</h3>${fld('Nhận xét của quản lý','Nhận xét gửi người làm','textarea',3)}<div class="grid3">${fld('Điểm (1-5)','Điểm (1–5)','number')}</div></div>`:''}
+    <div class="d-sec"><h3>Sau khi đăng</h3>
+      ${fld('Link bài đăng','Link bài đăng','url')}
+      <div class="grid3">${fld('Reach','Reach','number')}${fld('Lượt xem','Lượt xem','number')}${fld('Cảm xúc','Cảm xúc','number')}${fld('Bình luận','Bình luận','number')}${fld('Chia sẻ','Chia sẻ','number')}${fld('Tin nhắn','Tin nhắn','number')}</div>
+      ${p['Cập nhật lúc']?`<div class="sync">Cập nhật lần cuối ${esc(p['Cập nhật lúc'])}</div>`:''}
+    </div>
+  </div>
+  <div class="d-f">
+    ${!S.isNew&&!mgr&&['Ý tưởng','Đang làm','Cần sửa'].includes(p['Trạng thái'])?'<button class="btn gold" data-quick="Chờ duyệt">Gửi duyệt</button>':''}
+    ${!S.isNew&&mgr&&p['Trạng thái']==='Chờ duyệt'?'<button class="btn gold" data-quick="Đã duyệt">Duyệt bài</button><button class="btn danger" data-quick="Cần sửa">Yêu cầu sửa</button>':''}
+    ${!S.isNew&&!mgr&&p['Trạng thái']==='Đã duyệt'?'<button class="btn gold" data-quick="Đã đăng">Đánh dấu đã đăng</button>':''}
+    ${!S.isNew&&prop&&(mgr||propEditable())?'<button class="btn danger" id="dRemove">Xoá khỏi kế hoạch</button>':''}
+    <span class="spacer"></span>
+    <button class="btn" id="dCancel">Đóng</button>
+    <button class="btn primary" id="dSave">${S.isNew?'Tạo bài':'Lưu thay đổi'}</button>
+  </div>`;
+  $('#drawer').querySelectorAll('[data-f]').forEach(el=>el.addEventListener('input',()=>{S.draft[el.dataset.f]=el.value;}));
+  const bs=$('#drawer').querySelector('select[data-f="Thương hiệu"]');
+  if(bs) bs.addEventListener('change',()=>{ $('#drawer .d-h').dataset.b=bs.value; $('#dBrand').innerHTML=bTag(bs.value); });
+  $('#dClose').onclick=closeDrawer; $('#dCancel').onclick=closeDrawer;
+  $('#dSave').onclick=()=>save();
+  if($('#dRemove')) $('#dRemove').onclick=removePost;
+  $('#drawer').querySelectorAll('[data-quick]').forEach(b=>b.onclick=()=>save(b.dataset.quick));
+}
+function closeDrawer(){
+  if(Object.keys(S.draft).length && !confirm('Bạn có thay đổi chưa lưu. Đóng và bỏ thay đổi?')) return;
+  $('#drawer').classList.add('closed'); $('#scrim').classList.add('hidden'); S.open=null; S.draft={};
+}
+$('#scrim').onclick=closeDrawer;
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&S.open) closeDrawer(); });
+
+async function save(quick){
+  const fields={...S.draft}; if(quick) fields['Trạng thái']=quick;
+  if(S.isNew){
+    if(!(fields['Chủ đề / tiêu đề']||'').trim()) return toast('Nhập chủ đề cho bài trước khi tạo.',true);
+    if(!fields['Ngày đăng']) return toast('Chọn ngày đăng cho bài.',true);
+    fields['Thương hiệu']=fields['Thương hiệu']||S.open['Thương hiệu'];
+  }
+  if(!Object.keys(fields).length) return closeDrawer();
+  const btn=$('#dSave'); btn.disabled=true; btn.textContent='Đang lưu…';
+  try{
+    if(S.isNew){ const j=await call('create',{fields}); S.posts.push(j.post); toast('Đã tạo bài '+j.post['Mã']); }
+    else{ const j=await call('update',{id:S.open['Mã'],fields}); const i=S.posts.findIndex(p=>p['Mã']===S.open['Mã']); S.posts[i]=j.post; toast(quick?S.open['Mã']+' chuyển sang '+quick:'Đã lưu thay đổi'); }
+    const wasProp=S.open['Trạng thái']===PROP;
+    S.draft={}; closeDrawer();
+    if(wasProp) await load().catch(()=>{});
+    render();
+  }catch(e){ toast(e.message,true); btn.disabled=false; btn.textContent=S.isNew?'Tạo bài':'Lưu thay đổi'; }
+}
+
+/* ---------- Kế hoạch ---------- */
+const myLabel = ym => ym ? (+ym.slice(5,7))+'/'+ym.slice(0,4) : '';
+function planOf(person, ym){ return S.plans.find(p=>p['Người lập']===person && p.ym===ym) || {'Trạng thái':'Nháp'}; }
+function planPosts(person, ym){ return S.posts.filter(p=>p['Người phụ trách']===person && (p['Ngày đăng']||'').slice(0,7)===ym && p['Trạng thái']!=='Hủy').sort((a,c)=>(a['Ngày đăng']||'').localeCompare(c['Ngày đăng']||'')); }
+async function reloadRender(msg){ try{ await load(); }catch(e){} render(); if(msg) toast(msg); }
+
+function goalsHTML(ym, person){
+  const g=S.goals.filter(x=>x.ym===ym && (x['KPI số bài']||x['Mục tiêu tháng']||x['Mục tiêu']));
+  if(!g.length) return '';
+  const own=S.posts.filter(p=>(p['Ngày đăng']||'').slice(0,7)===ym && p['Trạng thái']!=='Hủy' && (!person||p['Người phụ trách']===person));
+  return `<div class="panel"><h3>Mục tiêu tháng ${myLabel(ym)}</h3><div class="goals">${g.map(x=>{
+    const b=x['Thương hiệu'], a=own.filter(p=>p['Thương hiệu']===b), pr=a.filter(p=>p['Trạng thái']===PROP).length;
+    const goal=x['Mục tiêu tháng']||x['Mục tiêu']||'';
+    return `<div class="goal" data-b="${esc(b)}"><b style="color:var(--b)">${esc(b)}</b><span class="num">${a.length-pr}${x['KPI số bài']?`<small style="display:inline;font-size:13px"> / ${esc(x['KPI số bài'])} bài</small>`:''}</span>
+      <small>${person?'Đã giao cho '+esc(person):'Đã giao cả team'}${pr?` · +${pr} đề xuất`:''}</small>${goal?`<small style="margin-top:4px">${esc(goal)}</small>`:''}</div>`;}).join('')}</div></div>`;
+}
+
+function renderPlan(){
+  const ym=$('#fMonth').value||todayISO().slice(0,7);
+  const person=isMgr()?$('#fPerson').value:S.me.name;
+  if(isMgr() && !person) return renderPlanOverview(ym);
+  const pl=planOf(person,ym), st=pl['Trạng thái']||'Nháp', mgr=isMgr();
+  const locked=!mgr && st==='Chờ duyệt';
+  const items=planPosts(person,ym).filter(p=>!$('#fBrand').value||p['Thương hiệu']===$('#fBrand').value);
+  const nProp=items.filter(p=>p['Trạng thái']===PROP).length;
+  const L=S.lists, canAdd=mgr||!locked;
+  const opt=(arr,sel)=>arr.map(o=>`<option ${o===sel?'selected':''}>${esc(o)}</option>`).join('');
+  const fb=pl['Nhận xét của quản lý'];
+  $('#main').innerHTML=`<div class="plan">
+    <div class="plan-h">
+      ${mgr?'<button class="btn" id="plBack">‹ Cả team</button>':''}
+      <h2>Kế hoạch tháng ${myLabel(ym)} · ${esc(person)}</h2><span class="pill" data-s="${esc(st)}">${esc(st)}</span>
+      <div class="acts">
+        ${canAdd?'<button class="btn" id="plImport">Nhập từ file / dán bảng</button>':''}
+        ${!mgr&&!locked?`<button class="btn gold" id="plSubmit">Gửi duyệt kế hoạch${nProp?' ('+nProp+' bài)':''}</button>`:''}
+        ${locked?'<button class="btn" id="plWithdraw">Rút lại để sửa</button>':''}
+        ${mgr&&(st==='Chờ duyệt'||nProp)?`<button class="btn gold" id="plApprove">Duyệt kế hoạch${nProp?' ('+nProp+' bài)':''}</button><button class="btn danger" id="plRevise">Yêu cầu sửa</button>`:''}
+      </div>
+    </div>
+    ${fb&&!mgr&&st!=='Đã duyệt'?`<div class="feedback"><b>Nhận xét của quản lý:</b> ${linkify(fb)}</div>`:''}
+    ${locked?'<div class="hint">Kế hoạch đang chờ anh quản lý duyệt. Muốn sửa thêm, bấm "Rút lại để sửa".</div>':''}
+    <div class="plan-top">
+      <div class="panel"><h3>File kế hoạch và ghi chú</h3>
+        ${mgr?`<div class="field"><label>Link file kế hoạch</label><div class="ro ${pl['Link file kế hoạch']?'':'mut'}">${pl['Link file kế hoạch']?linkify(pl['Link file kế hoạch']):'Chưa đính kèm'}</div></div>
+          <div class="field"><label>Ghi chú của ${esc(person)}</label><div class="ro ${pl['Ghi chú của nhân sự']?'':'mut'}">${pl['Ghi chú của nhân sự']?linkify(pl['Ghi chú của nhân sự']):'Không có'}</div></div>
+          <div class="field"><label for="plComment">Nhận xét gửi ${esc(person)}</label><textarea id="plComment" class="input" rows="3">${esc(fb||'')}</textarea></div>
+          <button class="btn" id="plSaveC">Lưu nhận xét</button>`
+        :`<div class="field"><label for="plLink">Link file kế hoạch (Google Sheet, Drive, Canva…)</label><input id="plLink" class="input" type="url" placeholder="Dán link nếu có file riêng" value="${esc(pl['Link file kế hoạch']||'')}" ${locked?'disabled':''}></div>
+          <div class="field"><label for="plNote">Ghi chú gửi quản lý</label><textarea id="plNote" class="input" rows="3" placeholder="Định hướng tháng, điểm cần anh lưu ý…" ${locked?'disabled':''}>${esc(pl['Ghi chú của nhân sự']||'')}</textarea></div>
+          ${locked?'':'<button class="btn" id="plSave">Lưu</button>'}`}
+        ${pl['Gửi duyệt lúc']?`<div class="sync" style="margin-top:8px">Gửi duyệt lúc ${esc(pl['Gửi duyệt lúc'])}</div>`:''}
+      </div>
+      ${goalsHTML(ym,person)||`<div class="panel"><h3>Mục tiêu tháng ${myLabel(ym)}</h3><div class="hint">Chưa có mục tiêu cho tháng này. Quản lý ghi trong tab "Kế hoạch tháng" của file dữ liệu.</div></div>`}
+    </div>
+    <div>
+      <div class="plan-h" style="margin-bottom:10px"><h2 style="font-size:16px">Danh sách bài</h2><span class="hint">${nProp} bài đề xuất · ${items.length-nProp} bài đã giao</span></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Ngày đăng</th><th>Thương hiệu</th><th>Định dạng</th><th>Giai đoạn</th><th>Chủ đề</th><th>Trạng thái</th></tr></thead>
+      <tbody>${items.map(p=>`<tr class="clickable ${p['Trạng thái']===PROP?'prop':''}" data-id="${esc(p['Mã'])}" data-b="${esc(p['Thương hiệu'])}"><td class="num">${fmtD(p['Ngày đăng'])}${p['Giờ đăng']?' · '+esc(p['Giờ đăng']):''}</td><td>${bTag(p['Thương hiệu'])}</td><td>${esc(p['Định dạng'])}</td><td>${esc(p['Giai đoạn'])}</td><td>${esc(p['Chủ đề / tiêu đề'])}</td><td>${p['Trạng thái']===PROP?'<span class="tag prop">Đề xuất</span>':`<span class="tag">Đã giao · ${esc(p['Trạng thái'])}</span>`}</td></tr>`).join('')||`<tr><td colspan="6" class="empty">Chưa có bài nào trong tháng ${myLabel(ym)}. ${canAdd?'Thêm ở dòng dưới hoặc nhập từ file.':''}</td></tr>`}</tbody>
+      ${canAdd?`<tfoot><tr class="qa"><td><input type="date" id="qaDate" class="input" aria-label="Ngày đăng" min="${ym}-01" max="${ym}-31" value="${ym}-01"></td>
+        <td><select id="qaBrand" class="input" aria-label="Thương hiệu">${opt(L['Thương hiệu']||[],$('#fBrand').value||'Lapis')}</select></td>
+        <td><select id="qaFmt" class="input" aria-label="Định dạng"><option value="">Định dạng</option>${opt(L['Định dạng']||[])}</select></td>
+        <td><select id="qaStage" class="input" aria-label="Giai đoạn"><option value="">Giai đoạn</option>${opt(L['Giai đoạn']||[])}</select></td>
+        <td><input id="qaTitle" class="input" placeholder="Chủ đề bài, Enter để thêm" aria-label="Chủ đề"></td>
+        <td><button class="btn primary" id="qaAdd">Thêm bài</button></td></tr></tfoot>`:''}
+      </table></div>
+      <div class="hint" style="margin-top:8px">${mgr?'Bài anh thêm ở đây được giao thẳng cho '+esc(person)+'.':'Bấm vào một bài để viết thêm nội dung triển khai, brief, CTA.'}</div>
+    </div>
+  </div>`;
+  document.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>openDrawer(tr.dataset.id));
+  const on=(id,fn)=>{const el=$('#'+id); if(el) el.onclick=fn;};
+  on('plBack',()=>{$('#fPerson').value='';render();});
+  on('plImport',()=>openImport(person,ym));
+  const planCall=async(op,fields,msg,btn)=>{ if(btn){btn.disabled=true;} try{ await call('plan',{op,month:ym,person,fields}); await reloadRender(msg);}catch(e){toast(e.message,true); if(btn) btn.disabled=false;} };
+  const myFields=()=>({'Link file kế hoạch':$('#plLink')?$('#plLink').value.trim():undefined,'Ghi chú của nhân sự':$('#plNote')?$('#plNote').value:undefined});
+  on('plSave',e=>planCall('save',myFields(),'Đã lưu',e.target));
+  on('plSubmit',e=>{ if(!nProp&&!($('#plLink').value.trim())) return toast('Thêm ít nhất 1 bài hoặc dán link file kế hoạch trước khi gửi duyệt.',true); planCall('submit',myFields(),'Đã gửi kế hoạch cho quản lý duyệt',e.target); });
+  on('plWithdraw',e=>planCall('withdraw',{},'Đã rút kế hoạch về để sửa',e.target));
+  on('plSaveC',e=>planCall('save',{'Nhận xét của quản lý':$('#plComment').value},'Đã lưu nhận xét',e.target));
+  on('plApprove',e=>{ if(!confirm(`Duyệt kế hoạch tháng ${myLabel(ym)} của ${person}? ${nProp} bài đề xuất sẽ chuyển vào bảng việc.`)) return; planCall('approve',{'Nhận xét của quản lý':$('#plComment').value},`Đã duyệt. ${nProp} bài đã vào bảng việc của ${person}.`,e.target); });
+  on('plRevise',e=>{ if(!$('#plComment').value.trim()){ $('#plComment').focus(); return toast('Ghi nhận xét để '+person+' biết cần sửa gì.',true);} planCall('revise',{'Nhận xét của quản lý':$('#plComment').value},'Đã gửi yêu cầu sửa',e.target); });
+  const add=async()=>{
+    const t=$('#qaTitle').value.trim(), d=$('#qaDate').value;
+    if(!t) return $('#qaTitle').focus(); if(!d) return toast('Chọn ngày đăng.',true);
+    const f={'Ngày đăng':d,'Thương hiệu':$('#qaBrand').value,'Định dạng':$('#qaFmt').value,'Giai đoạn':$('#qaStage').value,'Chủ đề / tiêu đề':t};
+    if(mgr) f['Người phụ trách']=person;
+    $('#qaAdd').disabled=true;
+    try{ await call('create',{fields:f}); await reloadRender('Đã thêm bài'); setTimeout(()=>$('#qaTitle')&&$('#qaTitle').focus(),50);}catch(e){toast(e.message,true); $('#qaAdd').disabled=false;}
+  };
+  on('qaAdd',add);
+  if($('#qaTitle')) $('#qaTitle').addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();add();} });
+}
+
+function renderPlanOverview(ym){
+  const rows=S.staff.map(s=>{const pl=planOf(s,ym), it=planPosts(s,ym), pr=it.filter(p=>p['Trạng thái']===PROP).length; return {s,pl,it,pr};});
+  const waiting=rows.filter(r=>r.pl['Trạng thái']==='Chờ duyệt').length;
+  $('#main').innerHTML=`<div class="plan">
+    <div class="plan-h"><h2>Kế hoạch tháng ${myLabel(ym)}</h2>${waiting?`<span class="pill" data-s="Chờ duyệt">${waiting} kế hoạch chờ anh duyệt</span>`:''}</div>
+    ${goalsHTML(ym,'')}
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Nhân sự</th><th>Trạng thái kế hoạch</th><th class="r">Bài đề xuất</th><th class="r">Bài đã giao</th><th>Gửi duyệt lúc</th><th>File kế hoạch</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr class="clickable" data-p="${esc(r.s)}"><td><b>${esc(r.s)}</b></td><td><span class="pill" data-s="${esc(r.pl['Trạng thái']||'Nháp')}">${esc(r.pl['Trạng thái']||'Nháp')}</span></td><td class="r num">${r.pr}</td><td class="r num">${r.it.length-r.pr}</td><td class="num">${esc(r.pl['Gửi duyệt lúc']||'–')}</td><td>${r.pl['Link file kế hoạch']?`<a href="${esc(r.pl['Link file kế hoạch'])}" target="_blank" rel="noopener">Mở file</a>`:'<span class="hint">–</span>'}</td></tr>`).join('')}
+    </tbody></table></div>
+    <div class="hint">Bấm vào một nhân sự để xem chi tiết, nhận xét và duyệt kế hoạch.</div>
+  </div>`;
+  document.querySelectorAll('tr[data-p]').forEach(tr=>tr.onclick=e=>{ if(e.target.closest('a')) return; $('#fPerson').value=tr.dataset.p; render(); });
+}
+
+async function removePost(){
+  const p=S.open; if(!confirm('Xoá bài "'+p['Chủ đề / tiêu đề']+'" khỏi kế hoạch?')) return;
+  try{ await call('remove',{id:p['Mã']}); S.draft={}; closeDrawer(); await reloadRender('Đã xoá khỏi kế hoạch'); }
+  catch(e){ toast(e.message,true); }
+}
+
+/* ---------- Nhập kế hoạch từ file / dán bảng ---------- */
+const IMP_FIELDS=[
+  ['Ngày đăng',/ngày|date|day/,/hạn|deadline/],
+  ['Giờ đăng',/giờ|time|khung/],
+  ['Thương hiệu',/thương hiệu|brand$|^brand|nhãn|fanpage|^page/],
+  ['Định dạng',/định dạng|format|loại|dạng bài/],
+  ['Giai đoạn',/giai đoạn|stage|phễu|mục đích|mục tiêu/],
+  ['Brief ảnh / video',/brief|hình|ảnh|video|visual|thiết kế/],
+  ['Chủ đề / tiêu đề',/chủ đề|tiêu đề|topic|title|tên bài|headline/],
+  ['Nội dung triển khai',/nội dung|content|ý tưởng|mô tả|triển khai/],
+  ['CTA',/cta|kêu gọi/],
+  ['Lưu ý',/lưu ý|ghi chú|note/]
+];
+const fold=s=>String(s??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').trim();
+const lowc=s=>String(s??'').toLowerCase().normalize('NFC').trim();
+function hdrMatch(re,h){ if(!re) return false; if(!re._f) re._f=new RegExp(fold(re.source)); return re.test(lowc(h))||re._f.test(fold(h)); }
+function parseDelimited(text){
+  const firstLine=text.split(/\r?\n/)[0]||'';
+  const d=firstLine.includes('\t')?'\t':(firstLine.split(';').length>firstLine.split(',').length?';':',');
+  const rows=[]; let row=[], cell='', q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){cell+='"';i++;} else q=false; } else cell+=c; }
+    else if(c==='"' && cell==='') q=true;
+    else if(c===d){ row.push(cell); cell=''; }
+    else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n') i++; row.push(cell); rows.push(row); row=[]; cell=''; }
+    else cell+=c;
+  }
+  if(cell!==''||row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r=>r.some(x=>String(x).trim()));
+}
+function loadXLSX(){
+  if(window.XLSX) return Promise.resolve();
+  return new Promise((ok,no)=>{const s=document.createElement('script'); s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload=ok; s.onerror=()=>no(new Error('Không tải được bộ đọc Excel. Thử dán bảng thay vì chọn file.')); document.head.appendChild(s);});
+}
+const pad2=n=>String(n).padStart(2,'0');
+function toISO(v, ym){
+  if(v instanceof Date && !isNaN(v)) return v.getFullYear()+'-'+pad2(v.getMonth()+1)+'-'+pad2(v.getDate());
+  if(typeof v==='number' && v>30000 && v<80000){ const d=new Date(Math.round((v-25569)*864e5)); return d.getUTCFullYear()+'-'+pad2(d.getUTCMonth()+1)+'-'+pad2(d.getUTCDate()); }
+  const s=String(v??'').trim(); let m;
+  if((m=s.match(/(\d{4})-(\d{1,2})-(\d{1,2})/))) return m[1]+'-'+pad2(m[2])+'-'+pad2(m[3]);
+  if((m=s.match(/(\d{1,2})\s*[\/\-.]\s*(\d{1,2})(?:\s*[\/\-.]\s*(\d{2,4}))?/))){
+    let y=m[3]?(m[3].length===2?'20'+m[3]:m[3]):ym.slice(0,4); const mo=+m[2], d=+m[1];
+    if(mo<1||mo>12||d<1||d>31) return '';
+    return y+'-'+pad2(mo)+'-'+pad2(d);
+  }
+  return '';
+}
+function toTime(v){
+  if(v instanceof Date && !isNaN(v)) return pad2(v.getHours())+':'+pad2(v.getMinutes());
+  if(typeof v==='number' && v>=0 && v<1){ const t=Math.round(v*1440); return pad2(Math.floor(t/60))+':'+pad2(t%60); }
+  const m=String(v??'').match(/(\d{1,2})\s*[:hH]\s*(\d{2})?/); return m&&+m[1]<24?pad2(m[1])+':'+(m[2]||'00'):'';
+}
+function pickList(v,list,extra){
+  const f=fold(v); if(!f) return '';
+  const hit=list.find(x=>fold(x)===f); if(hit) return hit;
+  for(const [re,to] of (extra||[])) if(re.test(f)) return to;
+  const part=list.find(x=>f.includes(fold(x))||fold(x).includes(f)); return part||String(v).trim();
+}
+const BRAND_ALIAS=[[/selia/,'Sélia'],[/1000|birthday|bd/,'1000Birthdays'],[/lapis/,'Lapis']];
+const FMT_ALIAS=[[/album|carousel|nhieu anh/,'Carousel'],[/reel/,'Reels'],[/story/,'Story'],[/video|clip/,'Video ngắn'],[/chu|text/,'Bài chữ'],[/anh/,'Ảnh đơn']];
+
+function closeModal(){ $('#modal').classList.add('hidden'); $('#mScrim').classList.add('hidden'); $('#modal').innerHTML=''; }
+$('#mScrim').onclick=closeModal;
+function openImport(person, ym){
+  const I={person, ym, rows:null, hdr:-1, map:{}, brand:$('#fBrand').value||'Lapis', sheets:null, wb:null};
+  $('#mScrim').classList.remove('hidden'); $('#modal').classList.remove('hidden');
+  step1();
+  function step1(){
+    $('#modal').innerHTML=`<div class="m-h"><h2 id="mTitle">Nhập kế hoạch tháng ${myLabel(ym)}${isMgr()?' cho '+esc(person):''}</h2><button class="close" id="mX" aria-label="Đóng">×</button></div>
+    <div class="m-b">
+      <div class="drop-zone"><b>Chọn file Excel hoặc CSV</b><div class="hint" style="margin:4px 0 10px">Mỗi dòng là 1 bài. Có dòng tiêu đề cột như Ngày đăng, Chủ đề, Định dạng…</div><input type="file" id="mFile" accept=".xlsx,.xls,.csv,.tsv,.txt"></div>
+      <div class="field"><label for="mPaste">Hoặc dán bảng: mở Google Sheet / Excel, bôi đen cả dòng tiêu đề và các dòng bài, copy rồi dán vào đây</label><textarea id="mPaste" class="input" rows="7" placeholder="Ngày đăng	Thương hiệu	Định dạng	Chủ đề	…"></textarea></div>
+      <div class="err" id="mErr"></div>
+    </div>
+    <div class="m-f"><span class="spacer"></span><button class="btn" id="mCancel">Huỷ</button><button class="btn primary" id="mRead">Đọc dữ liệu</button></div>`;
+    $('#mX').onclick=closeModal; $('#mCancel').onclick=closeModal;
+    $('#mFile').onchange=readFile;
+    $('#mRead').onclick=()=>{ const t=$('#mPaste').value; if(!t.trim()) return $('#mErr').textContent='Chọn file hoặc dán bảng trước.'; I.rows=parseDelimited(t); afterRead(); };
+  }
+  async function readFile(){
+    const f=$('#mFile').files[0]; if(!f) return; $('#mErr').textContent='Đang đọc file…';
+    try{
+      if(/\.(csv|tsv|txt)$/i.test(f.name)){ I.rows=parseDelimited(await f.text()); return afterRead(); }
+      await loadXLSX();
+      I.wb=XLSX.read(await f.arrayBuffer(),{type:'array',cellDates:true});
+      I.sheets=I.wb.SheetNames; useSheet(I.sheets[0]);
+    }catch(e){ $('#mErr').textContent=e.message||'Không đọc được file.'; }
+  }
+  function useSheet(name){ I.sheet=name; I.rows=XLSX.utils.sheet_to_json(I.wb.Sheets[name],{header:1,raw:true,defval:''}).filter(r=>r.some(x=>String(x).trim())); afterRead(); }
+  function afterRead(){
+    if(!I.rows||!I.rows.length){ $('#mErr').textContent='Không thấy dữ liệu.'; return; }
+    let best=-1, score=0;
+    I.rows.slice(0,15).forEach((r,i)=>{ const sc=r.filter(c=>String(c).length<60&&IMP_FIELDS.some(([,re,no])=>hdrMatch(re,c)&&!hdrMatch(no,c))).length; if(sc>score){score=sc;best=i;} });
+    I.hdr=score>=2?best:-1;
+    const heads=I.hdr>=0?I.rows[I.hdr].map(String):I.rows[0].map((_,i)=>'Cột '+(i+1));
+    I.heads=heads; I.map={}; const used=new Set();
+    IMP_FIELDS.forEach(([f,re,no])=>{ const i=heads.findIndex((h,i)=>!used.has(i)&&hdrMatch(re,h)&&!hdrMatch(no,h)); if(i>=0){I.map[f]=i;used.add(i);} });
+    step2();
+  }
+  function build(){
+    const body=I.rows.slice(I.hdr+1), L=S.lists, out=[];
+    body.forEach(r=>{
+      const g=f=>I.map[f]>=0&&I.map[f]!==undefined&&I.map[f]!==''?r[I.map[f]]:'';
+      const t=String(g('Chủ đề / tiêu đề')??'').trim(); if(!t) return;
+      const d=toISO(g('Ngày đăng'),ym);
+      const o={'Ngày đăng':d,'Chủ đề / tiêu đề':t,
+        'Thương hiệu':I.map['Thương hiệu']>=0?pickList(g('Thương hiệu'),L['Thương hiệu']||[],BRAND_ALIAS)||I.brand:I.brand,
+        'Định dạng':pickList(g('Định dạng'),L['Định dạng']||[],FMT_ALIAS),'Giai đoạn':pickList(g('Giai đoạn'),L['Giai đoạn']||[]),
+        'Giờ đăng':toTime(g('Giờ đăng')),'Nội dung triển khai':String(g('Nội dung triển khai')??'').trim(),'Brief ảnh / video':String(g('Brief ảnh / video')??'').trim(),
+        'CTA':String(g('CTA')??'').trim(),'Lưu ý':String(g('Lưu ý')??'').trim()};
+      o._ok=!!d; out.push(o);
+    });
+    return out;
+  }
+  function step2(){
+    const items=build(), ok=items.filter(x=>x._ok), other=ok.filter(x=>x['Ngày đăng'].slice(0,7)!==ym).length;
+    const colOpts=sel=>'<option value="">Không dùng</option>'+I.heads.map((h,i)=>`<option value="${i}" ${+sel===i&&sel!==undefined&&sel!==''?'selected':''}>${esc(h||'Cột '+(i+1))}</option>`).join('');
+    $('#modal').innerHTML=`<div class="m-h"><h2 id="mTitle">Kiểm tra trước khi thêm</h2><button class="close" id="mX" aria-label="Đóng">×</button></div>
+    <div class="m-b">
+      ${I.sheets&&I.sheets.length>1?`<div class="field" style="max-width:280px"><label for="mSheet">Trang tính</label><select id="mSheet" class="input">${I.sheets.map(n=>`<option ${n===I.sheet?'selected':''}>${esc(n)}</option>`).join('')}</select></div>`:''}
+      <div><div class="hint" style="margin-bottom:8px">Em đã tự ghép cột theo tiêu đề. Cột nào chưa đúng thì chọn lại.</div>
+      <div class="map">${IMP_FIELDS.map(([f])=>`<div class="field"><label>${esc(f)}${f==='Ngày đăng'||f==='Chủ đề / tiêu đề'?' *':''}</label><select class="input" data-map="${esc(f)}">${colOpts(I.map[f])}</select></div>`).join('')}
+        ${I.map['Thương hiệu']>=0?'':`<div class="field"><label>Thương hiệu cho tất cả bài</label><select class="input" id="mBrand">${(S.lists['Thương hiệu']||[]).map(b=>`<option ${b===I.brand?'selected':''}>${esc(b)}</option>`).join('')}</select></div>`}
+      </div></div>
+      <div class="hint"><b style="color:var(--ink)">${ok.length} bài hợp lệ</b>${items.length-ok.length?` · ${items.length-ok.length} dòng thiếu ngày đăng sẽ bỏ qua`:''}${other?` · ${other} bài có ngày ngoài tháng ${myLabel(ym)}, sẽ vào kế hoạch tháng tương ứng`:''}</div>
+      <div class="tbl-wrap"><table class="tbl sm"><thead><tr><th>Ngày</th><th>Giờ</th><th>Thương hiệu</th><th>Định dạng</th><th>Giai đoạn</th><th>Chủ đề</th><th>Nội dung</th></tr></thead><tbody>
+      ${items.slice(0,60).map(x=>`<tr class="${x._ok?'':'bad'}"><td class="num">${x._ok?fmtD(x['Ngày đăng']):'Thiếu ngày'}</td><td>${esc(x['Giờ đăng'])}</td><td>${bTag(x['Thương hiệu'])}</td><td>${esc(x['Định dạng'])}</td><td>${esc(x['Giai đoạn'])}</td><td>${esc(x['Chủ đề / tiêu đề'])}</td><td>${esc((x['Nội dung triển khai']||'').slice(0,70))}${(x['Nội dung triển khai']||'').length>70?'…':''}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">Chưa đọc được bài nào. Kiểm tra cột "Chủ đề".</td></tr>'}
+      </tbody></table></div>
+      <div class="err" id="mErr"></div>
+    </div>
+    <div class="m-f"><button class="btn" id="mBack">‹ Chọn lại file</button><span class="spacer"></span><button class="btn" id="mCancel">Huỷ</button><button class="btn primary" id="mGo" ${ok.length?'':'disabled'}>Thêm ${ok.length} bài vào kế hoạch</button></div>`;
+    $('#mX').onclick=closeModal; $('#mCancel').onclick=closeModal; $('#mBack').onclick=step1;
+    if($('#mSheet')) $('#mSheet').onchange=e=>useSheet(e.target.value);
+    if($('#mBrand')) $('#mBrand').onchange=e=>{I.brand=e.target.value;step2();};
+    document.querySelectorAll('[data-map]').forEach(s=>s.onchange=()=>{ I.map[s.dataset.map]=s.value===''?undefined:+s.value; step2(); });
+    $('#mGo').onclick=async()=>{
+      const items=ok.map(x=>{const o={...x}; delete o._ok; Object.keys(o).forEach(k=>{if(o[k]==='')delete o[k];}); if(isMgr()) o['Người phụ trách']=person; return o;});
+      $('#mGo').disabled=true; $('#mGo').textContent='Đang thêm…';
+      try{ const j=await call('createMany',{items}); closeModal(); await reloadRender('Đã thêm '+(j.posts||items).length+' bài vào kế hoạch'); }
+      catch(e){ $('#mErr').textContent=e.message; $('#mGo').disabled=false; $('#mGo').textContent='Thêm '+ok.length+' bài vào kế hoạch'; }
+    };
+  }
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#modal').classList.contains('hidden')) closeModal(); });
+
+/* ---------- Wiring ---------- */
+document.querySelectorAll('.views button').forEach(b=>b.onclick=()=>{S.view=b.dataset.v;render();});
+['#fMonth','#fBrand','#fPerson'].forEach(s=>$(s).addEventListener('change',render));
+$('#fText').addEventListener('input',()=>{clearTimeout(S._q);S._q=setTimeout(render,180);});
+$('#reload').onclick=async()=>{try{await load();render();}catch(e){toast(e.message,true);}};
+$('#newPost').onclick=()=>openDrawer(null,true);
+setInterval(()=>{ if(S.token&&!S.open&&document.visibilityState==='visible') load().then(render).catch(()=>{}); },120000);
+boot();
+</script>
+</body>
+</html>
