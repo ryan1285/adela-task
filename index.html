@@ -161,6 +161,31 @@ textarea.input{resize:vertical;min-height:80px}
 .toast.bad{background:var(--danger)}
 .loading{display:grid;place-items:center;height:60vh;color:var(--muted)}
 
+/* ---------- Review (quản lý) ---------- */
+.views .cnt{display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--gold);color:#1d1d1d;font-size:11px;font-weight:700;line-height:18px;text-align:center}
+.views .cnt:empty{display:none}
+.rev{display:grid;gap:22px;max-width:1100px}
+.rev h2{font-size:17px;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.rev h2 .pill{font-size:12px}
+.rcard{background:#fff;border:1px solid var(--line);border-left:5px solid var(--b);border-radius:var(--r-md);padding:14px 16px;display:grid;gap:10px}
+.rcard + .rcard{margin-top:12px}
+.rc-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.rc-h b{color:var(--ink)}
+.rc-t{font-size:16px;font-weight:700;margin:0;color:var(--ink)}
+.rc-g{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.rc-box{background:var(--paper);border-radius:8px;padding:10px 12px;font-size:13px;white-space:pre-wrap;word-break:break-word;max-height:220px;overflow:auto}
+.rc-box small{display:block;font-weight:600;color:var(--muted);margin-bottom:4px;white-space:normal}
+.rc-a{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.rc-a textarea{flex:1 1 280px;min-height:40px}
+.rc-a select{width:auto}
+.rlist{background:#fff;border:1px solid var(--line);border-radius:var(--r-md)}
+.rlist .row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap;cursor:pointer}
+.rlist .row:last-child{border-bottom:0}
+.rlist .row:hover{background:var(--lapis-wash)}
+.rlist .row .grow{flex:1;min-width:180px}
+.empty-box{background:#fff;border:1px dashed var(--line);border-radius:var(--r-md);padding:18px;color:var(--muted);font-size:14px}
+@media (max-width:760px){ .rc-g{grid-template-columns:1fr} }
+
 /* ---------- Plan ---------- */
 .plan{display:grid;gap:18px;max-width:1180px}
 .plan>*,.plan-top>*{min-width:0}
@@ -236,6 +261,7 @@ textarea.input{resize:vertical;min-height:80px}
   <header class="topbar">
     <div class="mark"><i aria-hidden="true"></i>Workspace – Marketing Adela</div>
     <nav class="views" aria-label="Chế độ xem">
+      <button data-v="review" aria-pressed="false" class="mgr">Duyệt<span class="cnt" id="revCnt"></span></button>
       <button data-v="board" aria-pressed="true">Bảng</button>
       <button data-v="plan" aria-pressed="false">Kế hoạch</button>
       <button data-v="cal" aria-pressed="false">Lịch đăng</button>
@@ -311,7 +337,7 @@ $('#loginForm').addEventListener('submit', async e=>{
   catch(err){ $('#lgErr').textContent=err.message; }
   finally{ $('#lgBtn').disabled=false; }
 });
-function logout(){ S.token=''; store.del('tm_token'); closeDrawer(); showLogin(); }
+function logout(){ S.token=''; S._booted=false; store.del('tm_token'); closeDrawer(); showLogin(); }
 $('#logout').onclick=logout;
 
 async function load(){
@@ -330,6 +356,8 @@ async function boot(){
   $('#fBrand').innerHTML='<option value="">Mọi thương hiệu</option>'+brands.map(b=>`<option>${esc(b)}</option>`).join('');
   $('#fPerson').innerHTML='<option value="">Cả team</option>'+S.staff.map(b=>`<option>${esc(b)}</option>`).join('');
   if(!$('#fMonth').value) $('#fMonth').value=todayISO().slice(0,7);
+  if(!S._booted){ S._booted=true; S.view=isMgr()?'review':'board'; }
+  if(!isMgr() && S.view==='review') S.view='board';
   render();
 }
 
@@ -363,7 +391,8 @@ function canMove(p,to){
 /* ---------- Views ---------- */
 function render(){
   document.querySelectorAll('.views button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===S.view));
-  ({board:renderBoard,plan:renderPlan,cal:renderCal,list:renderList,report:renderReport})[S.view]();
+  if(isMgr()){ const n=S.posts.filter(p=>p['Trạng thái']==='Chờ duyệt').length+S.plans.filter(p=>p['Trạng thái']==='Chờ duyệt').length; $('#revCnt').textContent=n||''; }
+  ({review:renderReview,board:renderBoard,plan:renderPlan,cal:renderCal,list:renderList,report:renderReport})[S.view]();
 }
 function cardHTML(p){
   const d=p['Ngày đăng']||'';
@@ -559,6 +588,55 @@ async function save(quick){
     if(wasProp) await load().catch(()=>{});
     render();
   }catch(e){ toast(e.message,true); btn.disabled=false; btn.textContent=S.isNew?'Tạo bài':'Lưu thay đổi'; }
+}
+
+/* ---------- Duyệt (quản lý) ---------- */
+const linkify0 = t => esc(t).replace(/https?:\/\/[^\s<]+/g, u=>`<a href="${u}" target="_blank" rel="noopener">${u.length>60?u.slice(0,57)+'…':u}</a>`);
+function renderReview(){
+  const b=$('#fBrand').value, pe=$('#fPerson').value, t=todayISO();
+  const keep=p=>(!b||p['Thương hiệu']===b)&&(!pe||p['Người phụ trách']===pe);
+  const by=(a,c)=>(a['Ngày đăng']||'').localeCompare(c['Ngày đăng']||'');
+  const wait=S.posts.filter(p=>p['Trạng thái']==='Chờ duyệt'&&keep(p)).sort(by);
+  const plans=S.plans.filter(p=>p['Trạng thái']==='Chờ duyệt'&&(!pe||p['Người lập']===pe));
+  const toPost=S.posts.filter(p=>p['Trạng thái']==='Đã duyệt'&&p['Ngày đăng']&&p['Ngày đăng']<=t&&keep(p)).sort(by);
+  const late=S.posts.filter(p=>['Ý tưởng','Đang làm','Cần sửa'].includes(p['Trạng thái'])&&p['Hạn nộp duyệt']&&p['Hạn nộp duyệt']<=t&&keep(p)).sort(by);
+  const fixing=S.posts.filter(p=>p['Trạng thái']==='Cần sửa'&&keep(p)).sort(by);
+  const scoreOpts='<option value="">Điểm</option>'+[5,4,3,2,1].map(n=>`<option value="${n}">${n} điểm</option>`).join('');
+  const box=(label,v)=>v?`<div class="rc-box"><small>${label}</small>${linkify0(v)}</div>`:'';
+  const row=p=>`<div class="row" data-open="${esc(p['Mã'])}" data-b="${esc(p['Thương hiệu'])}">${bTag(p['Thương hiệu'])}<span class="grow"><b>${esc(p['Chủ đề / tiêu đề'])}</b></span><span class="hint">${esc(p['Người phụ trách'])} · đăng ${fmtD(p['Ngày đăng'])} · hạn duyệt ${fmtD(p['Hạn nộp duyệt'])}</span>${flags(p).map(([c,x])=>`<span class="tag ${c}">${x}</span>`).join('')}</div>`;
+  $('#main').innerHTML=`<div class="rev">
+    <section><h2>Bài chờ anh duyệt <span class="pill" data-s="${wait.length?'Chờ duyệt':''}">${wait.length}</span></h2>
+    ${wait.length?wait.map(p=>`<article class="rcard" data-b="${esc(p['Thương hiệu'])}" data-id="${esc(p['Mã'])}">
+      <div class="rc-h">${bTag(p['Thương hiệu'])}<span>${esc(p['Mã'])}</span><span>·</span><b>${esc(p['Người phụ trách'])}</b><span>·</span><span>${esc(p['Định dạng'])}</span><span>·</span><span>Đăng ${fmtD(p['Ngày đăng'])}${p['Giờ đăng']?' lúc '+esc(p['Giờ đăng']):''}</span>${flags(p).map(([c,x])=>`<span class="tag ${c}">${x}</span>`).join('')}${p['Cập nhật lúc']?`<span>· gửi lúc ${esc(p['Cập nhật lúc'])}</span>`:''}</div>
+      <h3 class="rc-t">${esc(p['Chủ đề / tiêu đề'])}</h3>
+      <div class="rc-g">${box('Caption',p['Caption'])||'<div class="rc-box"><small>Caption</small><span class="hint">Chưa có caption</span></div>'}${box('Nội dung triển khai',p['Nội dung triển khai'])}</div>
+      <div class="rc-h">${p['Link file ảnh / video']?`<a class="btn" href="${esc(p['Link file ảnh / video'])}" target="_blank" rel="noopener">Mở ảnh / video</a>`:'<span class="tag late">Chưa có link ảnh / video</span>'}${p['Ghi chú của nhân sự']?`<span>Ghi chú của ${esc(p['Người phụ trách'])}: ${linkify0(p['Ghi chú của nhân sự'])}</span>`:''}${p['CTA']?`<span>CTA: ${esc(p['CTA'])}</span>`:''}</div>
+      <div class="rc-a"><textarea class="input" rows="2" data-c placeholder="Nhận xét gửi ${esc(p['Người phụ trách'])} (bắt buộc khi yêu cầu sửa)">${esc(p['Nhận xét của quản lý']||'')}</textarea>
+        <select class="input" data-s aria-label="Điểm">${scoreOpts}</select>
+        <button class="btn gold" data-act="Đã duyệt">Duyệt</button><button class="btn danger" data-act="Cần sửa">Yêu cầu sửa</button><button class="btn" data-detail>Chi tiết</button></div>
+    </article>`).join(''):`<div class="empty-box">Chưa có bài nào chờ duyệt. Khi các bạn bấm <b>Gửi duyệt</b> trên một bài, bài đó sẽ hiện ở đây kèm caption và link ảnh/video để anh duyệt hoặc yêu cầu sửa ngay.</div>`}
+    </section>
+    <section><h2>Kế hoạch tháng chờ duyệt <span class="pill" data-s="${plans.length?'Chờ duyệt':''}">${plans.length}</span></h2>
+    ${plans.length?`<div class="rlist">${plans.map(pl=>{const n=S.posts.filter(p=>p['Người phụ trách']===pl['Người lập']&&p['Trạng thái']===PROP&&(p['Ngày đăng']||'').slice(0,7)===pl.ym).length;return `<div class="row" data-plan="${esc(pl['Người lập'])}" data-ym="${esc(pl.ym)}"><span class="grow"><b>${esc(pl['Người lập'])}</b> – kế hoạch tháng ${myLabel(pl.ym)}</span><span class="hint">${n} bài đề xuất${pl['Gửi duyệt lúc']?' · gửi '+esc(pl['Gửi duyệt lúc']):''}</span><span class="btn gold">Xem và duyệt ›</span></div>`;}).join('')}</div>`:'<div class="empty-box">Không có kế hoạch nào chờ duyệt.</div>'}
+    </section>
+    ${toPost.length?`<section><h2>Đã duyệt, đến ngày đăng nhưng chưa đăng <span class="pill" data-s="Cần sửa">${toPost.length}</span></h2><div class="rlist">${toPost.map(row).join('')}</div></section>`:''}
+    ${late.length?`<section><h2>Đến hạn / trễ hạn nộp duyệt <span class="pill" data-s="Cần sửa">${late.length}</span></h2><div class="rlist">${late.map(row).join('')}</div></section>`:''}
+    ${fixing.length?`<section><h2>Đang chờ các bạn sửa <span class="pill">${fixing.length}</span></h2><div class="rlist">${fixing.map(row).join('')}</div></section>`:''}
+  </div>`;
+  document.querySelectorAll('[data-open]').forEach(r=>r.onclick=()=>openDrawer(r.dataset.open));
+  document.querySelectorAll('[data-plan]').forEach(r=>r.onclick=()=>{ $('#fPerson').value=r.dataset.plan; $('#fMonth').value=r.dataset.ym; S.view='plan'; render(); });
+  document.querySelectorAll('.rcard').forEach(card=>{
+    const id=card.dataset.id;
+    card.querySelector('[data-detail]').onclick=()=>openDrawer(id);
+    card.querySelectorAll('[data-act]').forEach(btn=>btn.onclick=async()=>{
+      const st=btn.dataset.act, c=card.querySelector('[data-c]').value.trim(), sc=card.querySelector('[data-s]').value;
+      if(st==='Cần sửa'&&!c){ card.querySelector('[data-c]').focus(); return toast('Ghi nhận xét để bạn ấy biết cần sửa gì.',true); }
+      const fields={'Trạng thái':st,'Nhận xét của quản lý':c}; if(sc) fields['Điểm (1-5)']=sc;
+      card.querySelectorAll('button').forEach(x=>x.disabled=true);
+      try{ const j=await call('update',{id,fields}); const i=S.posts.findIndex(p=>p['Mã']===id); S.posts[i]=j.post; render(); toast(st==='Đã duyệt'?'Đã duyệt '+id:'Đã gửi yêu cầu sửa '+id); }
+      catch(e){ toast(e.message,true); card.querySelectorAll('button').forEach(x=>x.disabled=false); }
+    });
+  });
 }
 
 /* ---------- Kế hoạch ---------- */
